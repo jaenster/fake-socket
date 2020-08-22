@@ -1,6 +1,6 @@
 {
   "name": "fake-node-socket",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A simple socket faker to be able to unit test software that relay on sockets",
   "main": "bin/index.js",
   "types": "bin/index.d.ts",
