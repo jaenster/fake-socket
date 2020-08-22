@@ -1,0 +1,44 @@
+{
+  "name": "fake-socket",
+  "version": "0.0.1",
+  "description": "A simple socket faker to be able to unit test software that relay on sockets",
+  "main": "bin/index.js",
+  "types": "bin/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "coverage": "yarn && tsc && nyc yarn test",
+    "test": "yarn && tsc && mocha -r ts-node/register test/**/*.test.ts"
+  },
+  "files": [
+    "/bin"
+  ],
+  "keywords": [
+    "node",
+    "socket",
+    "test",
+    "unit",
+    "unit test",
+    "MIT",
+    "chai",
+    "mocha",
+    "no dependencies",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jaenster/fake-socket.git"
+  },
+  "author": "Jaenster",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/chai": "^4.2.11",
+    "@types/json5": "^0.0.30",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.7.4",
+    "chai": "^4.2.0",
+    "mocha": "^8.0.1",
+    "nyc": "^15.1.0",
+    "ts-node": "^8.6.2",
+    "typescript": "^3.8.2"
+  }
+}
