@@ -1,4 +1,4 @@
-# fake-socket
+# fake-node-socket
 
 When writing unit tests, i get pretty annoyed i cant test with an actual socket.
 
@@ -8,7 +8,7 @@ This code comes straight from the unit test:
 
 ```typescript
 import {Socket} from "net";
-import {FakeSocket} from "fake-socket"
+import {FakeSocket} from "fake-node-socket"
 
 
 (async function () {
