@@ -1,12 +1,41 @@
 import {Duplex} from "stream";
 import {AddressInfo,  Socket, SocketConnectOpts} from "net";
+import {FiFo} from "@jaenster/queues";
 
 
 type NoReadonly<T> = { -readonly [P in keyof T]: T[P] };
 
 const otherSym = Symbol('other');
+const notifySym = Symbol('notify');
+const fakeSockSym = Symbol('fakeSock');
 export class FakeSocket extends Duplex implements Socket {
-    public readonly [otherSym]: FakeSocket;
+
+    // Data object with custom values
+    [fakeSockSym] = {
+        queue: new FiFo<Buffer>(FakeSocket.prototype[notifySym].bind(this)),
+        timeoutCount: 0,
+    };
+
+    [notifySym](this: NoReadonly<FakeSocket>) {
+        const {queue} = this[fakeSockSym];
+        const buffers = (queue as any).q.slice((queue as any).i) as Buffer[];
+
+        // set the buffersize
+        this.bufferSize = buffers.reduce((acc,cur) => (acc|0)+(cur.length|0),0);
+
+        if (++this[fakeSockSym].timeoutCount === 1) {
+            // Next tick, fire all events
+            setTimeout(() => {
+                for(const buffer of queue) {
+                    this.emit('data', buffer);
+                    this.bytesRead += buffer.length;
+                    this.bufferSize -= buffer.length;
+                }
+                this[fakeSockSym].timeoutCount = 0;
+            })
+        }
+    }
+
 
     static createPair(): [FakeSocket, FakeSocket] {
         const one = new FakeSocket();
@@ -35,7 +64,6 @@ export class FakeSocket extends Duplex implements Socket {
     connect(path: string, connectionListener?: () => void): this;
     connect(...args: any[]): this {
         args.filter(e => typeof e === 'function').forEach(setTimeout);
-        console.log('Faking socket');
         return this;
     }
 
@@ -48,13 +76,7 @@ export class FakeSocket extends Duplex implements Socket {
         if (typeof chunk === 'number') chunk = [chunk]; // if number, convert to array of numbers
         if (!(chunk instanceof Buffer)) chunk = Buffer.from(chunk);
 
-        const other = this[otherSym] as NoReadonly<FakeSocket>;
-
-        other.bufferSize += chunk.length;
-        other.emit('data', chunk);
-        other.bytesRead += chunk.length;
-        other.bufferSize -= chunk.length;
-
+        this[otherSym][fakeSockSym].queue.add(chunk);
         (this as NoReadonly<FakeSocket>).bytesWritten += chunk.length;
 
         return true;

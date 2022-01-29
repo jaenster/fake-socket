@@ -1,7 +1,7 @@
 import {expect} from 'chai';
 
 import {Socket} from "net";
-import {FakeSocket} from "../bin";
+import {FakeSocket} from "../src";
 
 describe('fake socket', function () {
 
@@ -23,7 +23,7 @@ describe('fake socket', function () {
             two.write(testData);
         });
 
-        // what we recv'd should be the same as the test data, even the same Buffer object
+        // what we received should be the same as the test data, even the same Buffer object
         expect(recved).equal(testData);
 
     });

@@ -1,6 +1,6 @@
 {
   "name": "fake-node-socket",
-  "version": "0.0.3",
+  "version": "0.0.5",
   "description": "A simple socket faker to be able to unit test software that relay on sockets",
   "main": "bin/index.js",
   "types": "bin/index.d.ts",
@@ -21,7 +21,6 @@
     "MIT",
     "chai",
     "mocha",
-    "no dependencies",
     "typescript"
   ],
   "repository": {
@@ -30,6 +29,10 @@
   },
   "author": "Jaenster",
   "license": "MIT",
+  "dependencies": {
+    "@jaenster/queues": "^0.1.2",
+    "map-ext": "^0.1.4"
+  },
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/json5": "^0.0.30",
@@ -39,6 +42,6 @@
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
     "ts-node": "^8.6.2",
-    "typescript": "^3.8.2"
+    "typescript": "^4.4.4"
   }
 }
