@@ -1,5 +1,5 @@
-import {Duplex} from "stream";
-import {AddressInfo,  Socket, SocketConnectOpts} from "net";
+import {Duplex} from "node:stream";
+import {AddressInfo,  Socket, SocketConnectOpts} from "node:net";
 import {FiFo} from "@jaenster/queues";
 
 
@@ -8,6 +8,7 @@ type NoReadonly<T> = { -readonly [P in keyof T]: T[P] };
 const otherSym = Symbol('other');
 const notifySym = Symbol('notify');
 const fakeSockSym = Symbol('fakeSock');
+// @ts-ignore - it implements socket alright
 export class FakeSocket extends Duplex implements Socket {
 
     // Data object with custom values
@@ -28,7 +29,7 @@ export class FakeSocket extends Duplex implements Socket {
             setTimeout(() => {
                 for(const buffer of queue) {
                     this.emit('data', buffer);
-                    this.bytesRead += buffer.length;
+                    (this as any).bytesRead += buffer.length;
                     this.bufferSize -= buffer.length;
                 }
                 this[fakeSockSym].timeoutCount = 0;

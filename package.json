@@ -1,17 +1,17 @@
 {
   "name": "fake-node-socket",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "A simple socket faker to be able to unit test software that relay on sockets",
-  "main": "bin/index.js",
-  "types": "bin/index.d.ts",
+  "main": "cjs/index.js",
+  "types": "cjs/index.d.ts",
   "scripts": {
     "build": "tsc",
     "coverage": "yarn && tsc && nyc yarn test",
-    "test": "yarn && tsc && mocha -r ts-node/register test/**/*.test.ts"
+    "test": "yarn && tsc && mocha -r ts-node/register test/**/*.test.ts",
+    "build-commonjs": "npx tsc --module commonjs --outDir cjs/",
+    "build-module": "npx tsc --module es2022 --outDir esm/",
+    "build-all": "npm run build-commonjs && npm run build-module"
   },
-  "files": [
-    "/bin"
-  ],
   "keywords": [
     "node",
     "socket",
@@ -30,18 +30,22 @@
   "author": "Jaenster",
   "license": "MIT",
   "dependencies": {
-    "@jaenster/queues": "^0.1.2",
-    "map-ext": "^0.1.4"
+    "@jaenster/queues": "^0.1.6",
+    "map-ext": "^0.1.5"
   },
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/json5": "^0.0.30",
     "@types/mocha": "^7.0.2",
-    "@types/node": "^13.7.4",
+    "@types/node": "^16.18.35",
     "chai": "^4.2.0",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
     "ts-node": "^8.6.2",
     "typescript": "^4.4.4"
+  },
+  "exports": {
+    "require": "./cjs/index.js",
+    "import": "./esm/index.js"
   }
 }

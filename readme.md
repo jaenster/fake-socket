@@ -31,3 +31,7 @@ import {FakeSocket} from "fake-node-socket"
     console.log(recved === testData); // true, its even the same Buffer object
 })();
 ```
+
+# esm - commonjs
+
+Since this package is so small it supports both esm and commonjs
