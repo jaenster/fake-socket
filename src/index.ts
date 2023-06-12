@@ -1,5 +1,5 @@
-import {Duplex} from "node:stream";
-import {AddressInfo,  Socket, SocketConnectOpts} from "node:net";
+import {Duplex} from "stream";
+import {AddressInfo, SocketReadyState, Socket, SocketConnectOpts} from "net";
 import {FiFo} from "@jaenster/queues";
 
 
@@ -8,8 +8,9 @@ type NoReadonly<T> = { -readonly [P in keyof T]: T[P] };
 const otherSym = Symbol('other');
 const notifySym = Symbol('notify');
 const fakeSockSym = Symbol('fakeSock');
-// @ts-ignore - it implements socket alright
 export class FakeSocket extends Duplex implements Socket {
+    pending: boolean
+    readyState: SocketReadyState
 
     // Data object with custom values
     [fakeSockSym] = {
